@@ -3,10 +3,10 @@
     <span v-if="day.num === 1">{{ day.month }}/</span>{{ day.num }} {{ day.holiday }}
     <span v-if="isToday">今日</span>
     <div :class="[$style.wrapper, { 'is-hidden': isShorten }]">
-      <div v-for="task in displayTaskList" :key="task.id" :class="$style.task">
+      <p v-for="task in displayedTaskList" :key="task.id" :class="$style.task">
         <span :class="$style.task__close" @click.stop="removeTask(task.id)">×</span>
         {{ task.name }}
-      </div>
+      </p>
     </div>
     <button v-if="isShorten && extraTask" :class="$style.button" @click.stop="isShorten = false">
       +{{ extraTask }} More
@@ -16,6 +16,7 @@
 
 <script>
 import { mapActions } from 'vuex';
+import { MODAL_OPEN } from '~/constants/variable';
 
 export default {
   props: {
@@ -42,19 +43,20 @@ export default {
     };
   },
   computed: {
-    displayTaskList() {
+    displayedTaskList() {
       return this.taskList.filter((task) => task.date === this.day.date);
     },
     modifierClass() {
-      if (this.isToday) return 'cell--today';
-      if (this.day.lastMonth || this.day.nextMonth) return 'cell--darken';
-      if (this.day.holiday) return 'cell--holiday';
-      if (this.index === 0 || this.index % 7 === 0) return 'cell--sunday';
-      if (this.index % 7 === 6) return 'cell--saturday';
+      const block = 'cell';
+      if (this.isToday) return `${block}--today`;
+      if (this.day.lastMonth || this.day.nextMonth) return `${block}--darken`;
+      if (this.day.holiday) return `${block}--holiday`;
+      if (this.index === 0 || this.index % 7 === 0) return `${block}--sunday`;
+      if (this.index % 7 === 6) return `${block}--saturday`;
       return '';
     },
     extraTask() {
-      return this.displayTaskList.length < 2 ? 0 : this.displayTaskList.length - 2;
+      return this.displayedTaskList.length < 2 ? 0 : this.displayedTaskList.length - 2;
     },
     isToday() {
       return this.today === this.day.date;
@@ -63,7 +65,7 @@ export default {
   methods: {
     ...mapActions(['handleModal']),
     setModal() {
-      this.handleModal('open');
+      this.handleModal(MODAL_OPEN);
       const { date } = this.day;
       this.$emit('handle-set-date', { date });
     },

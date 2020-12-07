@@ -1,22 +1,21 @@
 // import node_modules
 import Vue from 'vue';
 import Vuex from 'vuex';
-import { STORAGE_KEY } from '../constants/index';
-
-const days = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-const getCalendar = (year, month) => {
-  const firstDay = new Date(year, month - 1, 1);
-  const weekdayIndex = firstDay.getDay();
-  const lastMonthDays = month === 1 ? days[11] : days[month - 2];
-  const thisMonthDays = days[month - 1];
-  return {
-    year,
-    month,
-    weekdayIndex,
-    lastMonthDays,
-    thisMonthDays,
-  };
-};
+import {
+  STORAGE_KEY,
+  MODAL_OPEN,
+  FETCH_LOCAL_STORAGE,
+  SET_CALENDAR,
+  SET_HOLIDAYS,
+  SET_DATE,
+  PREV_MONTH,
+  NEXT_MONTH,
+  ADD_TASK,
+  REMOVE_TASK,
+  SAVE_TASK_LIST,
+  HANDLE_MODAL,
+} from '~/constants/variable';
+import { generateCalendar } from '~/constants/function';
 
 Vue.use(Vuex);
 
@@ -29,7 +28,7 @@ export default new Vuex.Store({
       lastMonthDays: '',
       thisMonthDays: '',
     },
-    displayDateList: [
+    displayedDateList: [
       {
         date: '',
         holiday: '',
@@ -42,23 +41,23 @@ export default new Vuex.Store({
       {
         date: '2020-12-20',
         name: '予定1',
-        id: '1',
+        id: 1,
       },
       {
         date: '2020-12-21',
         name: 'タスク',
-        id: '2',
+        id: 2,
       },
     ],
     holidays: {},
     today: '',
   },
   getters: {
-    displayDateList: (state) => {
+    displayedDateList: (state) => {
       // カレンダー表示
-      const array = [...Array(42).keys()]; // 0から41
-      return array.map((i) => {
-        const point = i - state.currentCalendar.weekdayIndex + 1;
+      const array = [...Array(42).keys()].map((i) => i + 1);
+      return array.map((num) => {
+        const point = num - state.currentCalendar.weekdayIndex;
         const lastMonth = point < 1;
         const nextMonth = point > state.currentCalendar.thisMonthDays;
 
@@ -94,87 +93,86 @@ export default new Vuex.Store({
     },
   },
   mutations: {
-    setCalendar(state) {
+    [FETCH_LOCAL_STORAGE](state) {
+      const json = localStorage.getItem(STORAGE_KEY);
+      if (!json) return;
+      state.taskList = JSON.parse(json);
+    },
+    [SET_CALENDAR](state) {
       const today = new Date();
       const day = today.getDate();
       const year = today.getFullYear();
       const month = today.getMonth() + 1;
-      state.currentCalendar = getCalendar(year, month);
+      state.currentCalendar = generateCalendar(year, month);
       state.today = `${year}-${`0${String(month)}`.slice(-2)}-${`0${String(day)}`.slice(-2)}`;
     },
-    setHolidays(state, payload) {
+    [SET_HOLIDAYS](state, payload) {
       state.holidays = payload.holidays;
     },
-    handleModal(state, payload) {
-      state.isModal = payload === 'open';
-    },
-    setDate(state, payload) {
+    [SET_DATE](state, payload) {
       state.selectedDate = payload.date;
     },
-    prevMonth(state) {
+    [PREV_MONTH](state) {
       const {
         currentCalendar: { month, year },
       } = state;
+      // 12月 <- 1月
       const thisMonth = month === 1 ? 12 : month - 1;
       const thisYear = month === 1 ? year - 1 : year;
 
-      state.currentCalendar = getCalendar(thisYear, thisMonth);
+      state.currentCalendar = generateCalendar(thisYear, thisMonth);
     },
-    nextMonth(state) {
+    [NEXT_MONTH](state) {
       const {
         currentCalendar: { month, year },
       } = state;
+      // 12月 -> 1月
       const thisMonth = month === 12 ? 1 : month + 1;
       const thisYear = month === 12 ? year + 1 : year;
-      state.currentCalendar = getCalendar(thisYear, thisMonth);
+
+      state.currentCalendar = generateCalendar(thisYear, thisMonth);
     },
-    addTask(state, payload) {
+    [ADD_TASK](state, payload) {
       state.taskList = [...state.taskList, payload];
     },
-    saveTaskList(state) {
+    [SAVE_TASK_LIST](state) {
       const json = JSON.stringify(state.taskList);
       if (!json) return;
       localStorage.setItem(STORAGE_KEY, json);
     },
-    fetchLocalStorage(state) {
-      const json = localStorage.getItem(STORAGE_KEY);
-      if (!json) return;
-      const obj = JSON.parse(json);
-      state.taskList = obj;
-    },
-    removeTask(state, payload) {
+    [REMOVE_TASK](state, payload) {
       state.taskList = state.taskList.filter((task) => task.id !== payload.id);
+    },
+    [HANDLE_MODAL](state, payload) {
+      state.isModal = payload === MODAL_OPEN;
     },
   },
   actions: {
     initialize({ commit }, payload) {
-      commit('fetchLocalStorage');
-      commit('setCalendar');
-      commit('setHolidays', payload);
-    },
-    handleModal({ commit }, payload) {
-      commit('handleModal', payload);
+      commit(FETCH_LOCAL_STORAGE);
+      commit(SET_CALENDAR);
+      commit(SET_HOLIDAYS, payload);
     },
     setDate({ commit }, payload) {
-      commit('setDate', payload);
+      commit(SET_DATE, payload);
     },
     prevMonth({ commit }) {
-      commit('prevMonth');
+      commit(PREV_MONTH);
     },
     nextMonth({ commit }) {
-      commit('nextMonth');
+      commit(NEXT_MONTH);
     },
     addTask({ commit }, payload) {
-      commit('addTask', payload);
+      commit(ADD_TASK, payload);
     },
     removeTask({ commit }, payload) {
-      commit('removeTask', payload);
+      commit(REMOVE_TASK, payload);
     },
     saveTaskList({ commit }, payload) {
-      commit('saveTaskList', payload);
+      commit(SAVE_TASK_LIST, payload);
     },
-    setDisplayDateList({ commit }) {
-      commit('setDisplayDateList');
+    handleModal({ commit }, payload) {
+      commit(HANDLE_MODAL, payload);
     },
   },
 });

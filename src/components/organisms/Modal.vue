@@ -2,7 +2,7 @@
   <div :class="$style.modal" @click.self="handleModal('close')">
     <div :class="$style.modal__inner">
       <span :class="$style.modal__close" @click="handleModal('close')">✖️</span>
-      {{ selectedDate }}
+      <div>{{ selectedDate }}</div>
       <div :class="$style.wrapper">
         <ModalTaskList
           v-for="task in displayedTaskList"
@@ -73,7 +73,7 @@ export default {
   height: 350px;
   left: 50%;
   padding: 40px;
-  position: absolute;
+  position: fixed;
   top: 50%;
   transform: translate(-50%, -50%);
   width: 500px;

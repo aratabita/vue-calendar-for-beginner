@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import uniqId from 'uniqid';
+import { uniqId } from '~/constants/function';
 
 export default {
   props: {
@@ -22,10 +22,10 @@ export default {
   },
   methods: {
     handleAddTask() {
-      const { name, date } = this;
-      if (!name) return;
+      if (!this.name) return;
       const id = uniqId();
-      this.$emit('handle-add-task', { name, date, id });
+      this.$emit('handle-add-task', { name: this.name, date: this.date, id });
+      this.name = '';
     },
   },
 };

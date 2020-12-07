@@ -4,7 +4,7 @@
     <Calender
       :current-calendar="currentCalendar"
       :holidays="holidays"
-      :display-date-list="displayDateList"
+      :displayed-date-list="displayedDateList"
       :task-list="taskList"
       :today="today"
       @handle-set-date="setDate"
@@ -25,7 +25,7 @@ import axios from 'axios';
 import Header from '~/components/organisms/Header.vue';
 import Calender from '~/components/organisms/Calender.vue';
 import Modal from '~/components/organisms/Modal.vue';
-import { HOLIDAY_URL } from '../../constants/index';
+import { HOLIDAY_URL } from '~/constants/variable';
 
 export default {
   components: {
@@ -40,7 +40,7 @@ export default {
   },
   computed: {
     ...mapState(['isModal', 'selectedDate', 'holidays', 'taskList', 'currentCalendar', 'today']),
-    ...mapGetters(['displayDateList']),
+    ...mapGetters(['displayedDateList']),
   },
   watch: {
     taskList() {
@@ -61,7 +61,7 @@ export default {
     })();
   },
   methods: {
-    ...mapActions(['initialize', 'setDate', 'addTask', 'setDisplayDateList', 'saveTaskList', 'removeTask']),
+    ...mapActions(['initialize', 'setDate', 'addTask', 'saveTaskList', 'removeTask']),
   },
 };
 </script>

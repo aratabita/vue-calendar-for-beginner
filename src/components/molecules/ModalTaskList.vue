@@ -26,8 +26,7 @@ export default {
   border-radius: 3px;
   color: whitesmoke;
   margin-bottom: 1px;
-  padding: 0 5px;
-  padding-right: 20px;
+  padding: 0 20px 0 5px;
   position: relative;
   word-break: break-word;
 }

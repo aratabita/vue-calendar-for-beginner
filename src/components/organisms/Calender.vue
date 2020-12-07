@@ -3,7 +3,7 @@
     <div :class="$style.calender">
       <div v-for="day in $options.static.days" :key="day" :class="$style.cell">{{ day }}</div>
       <CalenderCell
-        v-for="(day, index) in displayDateList"
+        v-for="(day, index) in displayedDateList"
         :key="day.date"
         :index="index"
         :task-list="taskList"
@@ -16,8 +16,8 @@
   </div>
 </template>
 <script>
-import { mapActions } from 'vuex';
 import CalenderCell from '~/components/molecules/CalenderCell.vue';
+import { WEEK_DAYS, MONTH_DAYS } from '~/constants/variable';
 
 export default {
   components: {
@@ -32,7 +32,7 @@ export default {
       type: Object,
       default: () => {},
     },
-    displayDateList: {
+    displayedDateList: {
       type: Array,
       required: true,
     },
@@ -46,11 +46,10 @@ export default {
     },
   },
   static: {
-    days: ['日', '月', '火', '水', '木', '金', '土'],
-    day: [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31],
+    days: WEEK_DAYS,
+    day: MONTH_DAYS,
   },
   methods: {
-    ...mapActions(['setDisplayDateList']),
     handleSetDate(payload) {
       this.$emit('handle-set-date', payload);
     },
