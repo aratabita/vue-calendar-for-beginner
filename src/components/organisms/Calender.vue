@@ -71,7 +71,7 @@ export default {
   }
 }
 .cell {
-  border-bottom: 1px dashed black;
+  border-bottom: 1px dashed #ccc;
   height: 30px;
   margin: 0 auto;
   text-align: center;

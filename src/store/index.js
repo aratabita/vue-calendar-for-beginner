@@ -133,7 +133,7 @@ export default new Vuex.Store({
       state.currentCalendar = generateCalendar(thisYear, thisMonth);
     },
     [ADD_TASK](state, payload) {
-      state.taskList = [...state.taskList, payload];
+      state.taskList = [payload, ...state.taskList];
     },
     [SAVE_TASK_LIST](state) {
       const json = JSON.stringify(state.taskList);

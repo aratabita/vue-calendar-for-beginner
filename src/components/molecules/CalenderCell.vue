@@ -1,12 +1,20 @@
 <template>
   <div :class="[$style.cell, $style[modifierClass]]" @click="setModal">
-    <span v-if="day.num === 1">{{ day.month }}/</span>{{ day.num }} {{ day.holiday }}
-    <span v-if="isToday">今日</span>
-    <div :class="[$style.wrapper, { 'is-hidden': isShorten }]">
-      <p v-for="task in displayedTaskList" :key="task.id" :class="$style.task">
-        <span :class="$style.task__close" @click.stop="removeTask(task.id)">×</span>
-        {{ task.name }}
-      </p>
+    <div>
+      <div :class="$style.cell__heading">
+        <span v-if="day.num === 1">{{ day.month }}/</span>{{ day.num }}
+        <span v-if="isToday" :class="[$style.label, $style['label--today']]">今日</span>
+        <span v-if="day.holiday" :class="[$style.label, $style['label--holiday']]">{{ day.holiday }}</span>
+      </div>
+    </div>
+
+    <div :class="[$style.wrapper, { [$style['wrapper--hidden']]: isShorten }]">
+      <transition-group name="fadeTask">
+        <p v-for="task in displayedTaskList" :key="task.id" :class="$style.task">
+          <span :class="$style.task__close" @click.stop="removeTask(task.id)">×</span>
+          {{ task.name }}
+        </p>
+      </transition-group>
     </div>
     <button v-if="isShorten && extraTask" :class="$style.button" @click.stop="isShorten = false">
       +{{ extraTask }} More
@@ -111,10 +119,33 @@ export default {
   }
 }
 
+.cell__heading {
+  align-items: center;
+  display: flex;
+  margin-bottom: 2px;
+}
+
+.label {
+  border-radius: 4px;
+  color: white;
+  display: block;
+  margin-left: 5px;
+  overflow: hidden;
+  padding: 1px 5px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  &--today {
+    background-color: rgba(255, 132, 38, 0.7);
+  }
+  &--holiday {
+    background-color: rgba(255, 36, 233, 0.6);
+  }
+}
+
 .wrapper {
   height: auto;
-  transition: height 3s;
-  &:global(.is-hidden) {
+  position: relative;
+  &--hidden {
     max-height: 32px;
     overflow: hidden;
   }
@@ -122,12 +153,12 @@ export default {
 
 .task {
   background-color: deepskyblue;
+  border-radius: 2px;
   color: white;
   margin-bottom: 1px;
   max-width: 100%;
   overflow: hidden;
-  padding: 0 5px;
-  padding-right: 10px;
+  padding: 0 10px 0 5px;
   position: relative;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -146,5 +177,23 @@ export default {
   position: absolute;
   right: 50%;
   transform: translateX(50%);
+}
+
+:global(.fadeTask-enter-active),
+:global(.fadeTask-leave-active) {
+  transition: opacity 0.3s;
+}
+:global(.fadeTask-enter),
+:global(.fadeTask-leave-to) {
+  opacity: 0;
+}
+
+:global(.fadeTask-move) {
+  transition: all 0.5s;
+}
+
+:global(.fadeTask-leave-active) {
+  position: absolute;
+  width: 100%;
 }
 </style>

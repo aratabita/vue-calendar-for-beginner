@@ -2,14 +2,16 @@
   <div :class="$style.modal" @click.self="handleModal('close')">
     <div :class="$style.modal__inner">
       <span :class="$style.modal__close" @click="handleModal('close')">✖️</span>
-      <div>{{ selectedDate }}</div>
+      <div :class="$style.modal__title">{{ displayedDate }}</div>
       <div :class="$style.wrapper">
-        <ModalTaskList
-          v-for="task in displayedTaskList"
-          :key="task.id"
-          :task="task"
-          @handle-remove-task="handleRemoveTask"
-        />
+        <transition-group name="fadeModalTask">
+          <ModalTaskList
+            v-for="task in displayedTaskList"
+            :key="task.id"
+            :task="task"
+            @handle-remove-task="handleRemoveTask"
+          />
+        </transition-group>
       </div>
       <ModalTaskInput :date="selectedDate" @handle-add-task="handleAddTask" />
     </div>
@@ -40,6 +42,10 @@ export default {
   computed: {
     displayedTaskList() {
       return this.taskList.filter(({ date }) => date === this.selectedDate);
+    },
+    displayedDate() {
+      const array = this.selectedDate.split('-');
+      return `${array[0]}年 ${array[1]}月 ${array[2]}日`;
     },
   },
   methods: {
@@ -88,11 +94,33 @@ export default {
   right: 10px;
   top: 10px;
 }
+
+.modal__title {
+  text-align: center;
+}
+
 .wrapper {
   height: 210px;
-  margin-bottom: 15px;
-  margin-top: 10px;
+  margin: 10px 10px 15px;
   overflow: scroll;
-  padding: 0 10px;
+  position: relative;
+}
+
+:global(.fadeModalTask-enter-active),
+:global(.fadeModalTask-leave-active) {
+  transition: opacity 0.3s;
+}
+:global(.fadeModalTask-enter),
+:global(.fadeModalTask-leave-to) {
+  opacity: 0;
+}
+
+:global(.fadeModalTask-move) {
+  transition: all 0.5s;
+}
+
+:global(.fadeModalTask-leave-active) {
+  position: absolute;
+  width: 100%;
 }
 </style>

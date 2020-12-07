@@ -10,13 +10,15 @@
       @handle-set-date="setDate"
       @handle-remove-task="removeTask"
     />
-    <Modal
-      v-if="isModal"
-      :task-list="taskList"
-      :selected-date="selectedDate"
-      @handle-add-task="addTask"
-      @handle-remove-task="removeTask"
-    />
+    <transition name="fade">
+      <Modal
+        v-if="isModal"
+        :task-list="taskList"
+        :selected-date="selectedDate"
+        @handle-add-task="addTask"
+        @handle-remove-task="removeTask"
+      />
+    </transition>
   </div>
 </template>
 <script>
@@ -68,5 +70,14 @@ export default {
 <style module lang="scss">
 .wrapper {
   position: relative;
+}
+
+:global(.fade-enter-active),
+:global(.fade-leave-active) {
+  transition: opacity 0.5s;
+}
+:global(.fade-enter),
+:global(.fade-leave-to) {
+  opacity: 0;
 }
 </style>
