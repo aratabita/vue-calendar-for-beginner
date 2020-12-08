@@ -14,4 +14,4 @@ export const NEXT_MONTH = 'NEXT_MONTH';
 export const ADD_TASK = 'ADD_TASK';
 export const SAVE_TASK_LIST = 'SAVE_TASK_LIST';
 export const REMOVE_TASK = 'REMOVE_TASK';
-export const HANDLE_MODAL = 'HANDLE_MODAL';
+export const SET_MODAL = 'SET_MODAL';

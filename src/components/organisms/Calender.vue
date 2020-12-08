@@ -11,6 +11,7 @@
         :today="today"
         @handle-set-date="handleSetDate"
         @handle-remove-task="handleRemoveTask"
+        @handle-set-modal="handleSetModal"
       />
     </div>
   </div>
@@ -55,6 +56,9 @@ export default {
     },
     handleRemoveTask(payload) {
       this.$emit('handle-remove-task', payload);
+    },
+    handleSetModal(payload) {
+      this.$emit('handle-set-modal', payload);
     },
   },
 };

@@ -1,7 +1,7 @@
 <template>
-  <div :class="$style.modal" @click.self="handleModal('close')">
+  <div :class="$style.modal" @click.self="handleSetModal('close')">
     <div :class="$style.modal__inner">
-      <span :class="$style.modal__close" @click="handleModal('close')">✖️</span>
+      <span :class="$style.modal__close" @click="handleSetModal('close')">✖️</span>
       <div :class="$style.modal__title">{{ displayedDate }}</div>
       <div :class="$style.wrapper">
         <transition-group name="fadeModalTask">
@@ -19,8 +19,6 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
-
 import ModalTaskList from '~/components/molecules/ModalTaskList.vue';
 import ModalTaskInput from '~/components/molecules/ModalTaskInput.vue';
 
@@ -49,7 +47,9 @@ export default {
     },
   },
   methods: {
-    ...mapActions(['handleModal']),
+    handleSetModal(payload) {
+      this.$emit('handle-set-modal', payload);
+    },
     handleAddTask(task) {
       this.$emit('handle-add-task', task);
     },

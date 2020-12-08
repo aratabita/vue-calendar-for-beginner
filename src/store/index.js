@@ -13,7 +13,7 @@ import {
   ADD_TASK,
   REMOVE_TASK,
   SAVE_TASK_LIST,
-  HANDLE_MODAL,
+  SET_MODAL,
 } from '~/constants/variable';
 import { generateCalendar } from '~/constants/function';
 
@@ -143,7 +143,7 @@ export default new Vuex.Store({
     [REMOVE_TASK](state, payload) {
       state.taskList = state.taskList.filter((task) => task.id !== payload.id);
     },
-    [HANDLE_MODAL](state, payload) {
+    [SET_MODAL](state, payload) {
       state.isModal = payload === MODAL_OPEN;
     },
   },
@@ -171,8 +171,8 @@ export default new Vuex.Store({
     saveTaskList({ commit }, payload) {
       commit(SAVE_TASK_LIST, payload);
     },
-    handleModal({ commit }, payload) {
-      commit(HANDLE_MODAL, payload);
+    setModal({ commit }, payload) {
+      commit(SET_MODAL, payload);
     },
   },
 });

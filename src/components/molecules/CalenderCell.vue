@@ -23,7 +23,6 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
 import { MODAL_OPEN } from '~/constants/variable';
 
 export default {
@@ -71,9 +70,8 @@ export default {
     },
   },
   methods: {
-    ...mapActions(['handleModal']),
     setModal() {
-      this.handleModal(MODAL_OPEN);
+      this.$emit('handle-set-modal', MODAL_OPEN);
       const { date } = this.day;
       this.$emit('handle-set-date', { date });
     },

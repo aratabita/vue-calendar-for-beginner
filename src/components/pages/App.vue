@@ -9,6 +9,7 @@
       :today="today"
       @handle-set-date="setDate"
       @handle-remove-task="removeTask"
+      @handle-set-modal="setModal"
     />
     <transition name="fade">
       <Modal
@@ -17,6 +18,7 @@
         :selected-date="selectedDate"
         @handle-add-task="addTask"
         @handle-remove-task="removeTask"
+        @handle-set-modal="setModal"
       />
     </transition>
   </div>
@@ -63,7 +65,7 @@ export default {
     })();
   },
   methods: {
-    ...mapActions(['initialize', 'setDate', 'addTask', 'saveTaskList', 'removeTask']),
+    ...mapActions(['initialize', 'setDate', 'addTask', 'saveTaskList', 'removeTask', 'setModal']),
   },
 };
 </script>
