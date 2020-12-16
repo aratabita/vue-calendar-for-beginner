@@ -23,7 +23,7 @@
         </p>
       </transition-group>
     </div>
-    <button v-if="isShorten && extraTask" :class="$style.button" @click.stop="isShorten = false">
+    <button v-if="isShorten && extraTask" :class="$style.button" @click.stop="displayExtraTask()">
       +{{ extraTask }} More
     </button>
   </div>
@@ -84,6 +84,16 @@ export default {
     },
     removeTask(id) {
       this.$emit('handle-remove-task', { id });
+    },
+    displayExtraTask() {
+      this.isShorten = false;
+      document.body.addEventListener(
+        'click',
+        () => {
+          this.isShorten = true;
+        },
+        { once: true }
+      );
     },
   },
 };

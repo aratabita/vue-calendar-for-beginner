@@ -1,21 +1,20 @@
 // import node_modules
 import Vue from 'vue';
 import Vuex from 'vuex';
-import {
-  STORAGE_KEY,
-  MODAL_OPEN,
-  FETCH_LOCAL_STORAGE,
-  SET_CALENDAR,
-  SET_HOLIDAYS,
-  SET_DATE,
-  PREV_MONTH,
-  NEXT_MONTH,
-  ADD_TASK,
-  REMOVE_TASK,
-  SAVE_TASK_LIST,
-  SET_MODAL,
-} from '~/constants/variable';
+import { STORAGE_KEY, MODAL_OPEN } from '~/constants/variable';
 import { generateCalendar } from '~/constants/function';
+
+// vuexMutations
+const FETCH_LOCAL_STORAGE = 'FETCH_LOCAL_STORAGE';
+const SET_CALENDAR = 'SET_CALENDAR';
+const SET_HOLIDAYS = 'SET_HOLIDAYS';
+const SET_DATE = 'SET_DATE';
+const PREV_MONTH = 'PREV_MONTH';
+const NEXT_MONTH = 'NEXT_MONTH';
+const ADD_TASK = 'ADD_TASK';
+const SAVE_TASK_LIST = 'SAVE_TASK_LIST';
+const REMOVE_TASK = 'REMOVE_TASK';
+const SET_MODAL = 'SET_MODAL';
 
 Vue.use(Vuex);
 
