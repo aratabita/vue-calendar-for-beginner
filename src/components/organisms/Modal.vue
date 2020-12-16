@@ -4,7 +4,13 @@
       <span :class="$style.modal__close" @click="handleSetModal('close')">✖️</span>
       <div :class="$style.modal__title">{{ displayedDate }}</div>
       <div :class="$style.wrapper">
-        <transition-group name="fadeModalTask">
+        <transition-group
+          :enter-class="$style.enter"
+          :enter-active-class="$style.enterActive"
+          :leave-to-class="$style.leaveTo"
+          :leave-active-class="$style.leaveActive"
+          :move-class="$style.move"
+        >
           <ModalTaskList
             v-for="task in displayedTaskList"
             :key="task.id"
@@ -106,20 +112,20 @@ export default {
   position: relative;
 }
 
-:global(.fadeModalTask-enter-active),
-:global(.fadeModalTask-leave-active) {
+.enterActive,
+.leaveActive {
   transition: opacity 0.3s;
 }
-:global(.fadeModalTask-enter),
-:global(.fadeModalTask-leave-to) {
+.enter,
+.leaveTo {
   opacity: 0;
 }
 
-:global(.fadeModalTask-move) {
+.move {
   transition: all 0.5s;
 }
 
-:global(.fadeModalTask-leave-active) {
+.leaveActive {
   position: absolute;
   width: 100%;
 }

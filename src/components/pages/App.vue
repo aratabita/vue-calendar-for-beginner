@@ -11,7 +11,12 @@
       @handle-remove-task="removeTask"
       @handle-set-modal="setModal"
     />
-    <transition name="fade">
+    <transition
+      :enter-class="$style.enter"
+      :enter-active-class="$style.enterActive"
+      :leave-to-class="$style.leaveTo"
+      :leave-active-class="$style.leaveActive"
+    >
       <Modal
         v-if="isModal"
         :task-list="taskList"
@@ -74,12 +79,12 @@ export default {
   position: relative;
 }
 
-:global(.fade-enter-active),
-:global(.fade-leave-active) {
+.enterActive,
+.leaveActive {
   transition: opacity 0.5s;
 }
-:global(.fade-enter),
-:global(.fade-leave-to) {
+.enter,
+.leaveTo {
   opacity: 0;
 }
 </style>

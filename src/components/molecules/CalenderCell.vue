@@ -9,7 +9,14 @@
     </div>
 
     <div :class="[$style.wrapper, { [$style['wrapper--hidden']]: isShorten }]">
-      <transition-group name="fadeTask">
+      <transition-group
+        appear
+        :enter-class="$style.enter"
+        :enter-active-class="$style.enterActive"
+        :leave-to-class="$style.leaveTo"
+        :leave-active-class="$style.leaveActive"
+        :move-class="$style.move"
+      >
         <p v-for="task in displayedTaskList" :key="task.id" :class="$style.task">
           <span :class="$style.task__close" @click.stop="removeTask(task.id)">×</span>
           {{ task.name }}
@@ -177,21 +184,21 @@ export default {
   transform: translateX(50%);
 }
 
-:global(.fadeTask-enter-active),
-:global(.fadeTask-leave-active) {
+.enterActive {
   transition: opacity 0.3s;
 }
-:global(.fadeTask-enter),
-:global(.fadeTask-leave-to) {
+.enter,
+.leaveTo {
   opacity: 0;
 }
 
-:global(.fadeTask-move) {
+.move {
   transition: all 0.5s;
 }
 
-:global(.fadeTask-leave-active) {
+.leaveActive {
   position: absolute;
+  transition: opacity 0.3s;
   width: 100%;
 }
 </style>
