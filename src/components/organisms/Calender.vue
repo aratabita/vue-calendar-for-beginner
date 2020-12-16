@@ -18,7 +18,7 @@
 </template>
 <script>
 import CalenderCell from '~/components/molecules/CalenderCell.vue';
-import { WEEK_DAYS, MONTH_DAYS } from '~/constants/variable';
+import { WEEK_DAYS } from '~/constants/variable';
 
 export default {
   components: {
@@ -48,7 +48,6 @@ export default {
   },
   static: {
     days: WEEK_DAYS,
-    day: MONTH_DAYS,
   },
   methods: {
     handleSetDate(payload) {
