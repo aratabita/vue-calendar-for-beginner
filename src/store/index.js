@@ -48,6 +48,7 @@ export default new Vuex.Store({
         id: 2,
       },
     ],
+    id: 2,
     holidays: {},
     today: '',
   },
@@ -96,6 +97,8 @@ export default new Vuex.Store({
       const json = localStorage.getItem(STORAGE_KEY);
       if (!json) return;
       state.taskList = JSON.parse(json);
+      const ids = state.taskList.map((task) => task.id);
+      state.id = Math.max(...ids);
     },
     [SET_CALENDAR](state) {
       const today = new Date();
@@ -132,7 +135,8 @@ export default new Vuex.Store({
       state.currentCalendar = generateCalendar(thisYear, thisMonth);
     },
     [ADD_TASK](state, payload) {
-      state.taskList = [payload, ...state.taskList];
+      state.id += 1;
+      state.taskList = [{ ...payload, id: state.id }, ...state.taskList];
     },
     [SAVE_TASK_LIST](state) {
       const json = JSON.stringify(state.taskList);

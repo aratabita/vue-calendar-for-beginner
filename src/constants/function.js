@@ -1,7 +1,4 @@
-export const uniqId = () => {
-  return Math.floor(Math.random() * 10000000000000001);
-};
-
+// eslint-disable-next-line import/prefer-default-export
 export const generateCalendar = (year, month) => {
   const firstDay = new Date(year, month - 1, 1);
   const weekdayIndex = firstDay.getDay();

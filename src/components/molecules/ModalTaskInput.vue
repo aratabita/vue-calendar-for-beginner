@@ -6,8 +6,6 @@
 </template>
 
 <script>
-import { uniqId } from '~/constants/function';
-
 export default {
   props: {
     date: {
@@ -23,8 +21,7 @@ export default {
   methods: {
     handleAddTask() {
       if (!this.name) return;
-      const id = uniqId();
-      this.$emit('handle-add-task', { name: this.name, date: this.date, id });
+      this.$emit('handle-add-task', { name: this.name, date: this.date });
       this.name = '';
     },
   },
