@@ -57,20 +57,40 @@ export default {
     },
   },
   created() {
-    (async () => {
-      try {
-        const { data: holidays } = await axios.get(HOLIDAY_URL);
-        this.initialize({ holidays });
-      } catch (e) {
+    axios
+      .get(HOLIDAY_URL)
+      .then(({ data: holidays }) => {
+        this.setHolidays({ holidays });
+      })
+      .catch(() => {
         // eslint-disable-next-line no-console
-        console.error(e);
-      } finally {
+        console.error('休日が取得できませんでした。');
+      })
+      .then(() => {
+        this.fetchLocalStorage();
+      })
+      .catch(() => {
+        // eslint-disable-next-line no-console
+        console.error('ローカルストレージから情報を取得できませんでした。');
+      })
+      .finally(() => {
+        this.setCalendar();
+        this.setId();
         this.connection = true;
-      }
-    })();
+      });
   },
   methods: {
-    ...mapActions(['initialize', 'setDate', 'addTask', 'saveTaskList', 'removeTask', 'setModal']),
+    ...mapActions([
+      'setCalendar',
+      'setId',
+      'setHolidays',
+      'fetchLocalStorage',
+      'setDate',
+      'addTask',
+      'saveTaskList',
+      'removeTask',
+      'setModal',
+    ]),
   },
 };
 </script>

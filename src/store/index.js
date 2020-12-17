@@ -15,6 +15,7 @@ const ADD_TASK = 'ADD_TASK';
 const SAVE_TASK_LIST = 'SAVE_TASK_LIST';
 const REMOVE_TASK = 'REMOVE_TASK';
 const SET_MODAL = 'SET_MODAL';
+const SET_ID = 'SET_ID';
 
 Vue.use(Vuex);
 
@@ -48,7 +49,7 @@ export default new Vuex.Store({
         id: 2,
       },
     ],
-    id: 2,
+    id: 1,
     holidays: {},
     today: '',
   },
@@ -95,8 +96,9 @@ export default new Vuex.Store({
   mutations: {
     [FETCH_LOCAL_STORAGE](state) {
       const json = localStorage.getItem(STORAGE_KEY);
-      if (!json) return;
-      state.taskList = JSON.parse(json);
+      state.taskList = json ? JSON.parse(json) : [];
+    },
+    [SET_ID](state) {
       const ids = state.taskList.map((task) => task.id);
       state.id = Math.max(...ids);
     },
@@ -151,9 +153,16 @@ export default new Vuex.Store({
     },
   },
   actions: {
-    initialize({ commit }, payload) {
-      commit(FETCH_LOCAL_STORAGE);
+    setCalendar({ commit }) {
       commit(SET_CALENDAR);
+    },
+    setId({ commit }) {
+      commit(SET_ID);
+    },
+    fetchLocalStorage({ commit }) {
+      commit(FETCH_LOCAL_STORAGE);
+    },
+    setHolidays({ commit }, payload) {
       commit(SET_HOLIDAYS, payload);
     },
     setDate({ commit }, payload) {
